@@ -18,8 +18,6 @@ double total;
 NSNumberFormatter *formatter;
 
 + (void)initialize{
-    NSLog(@"Initializing");
-    
     firstOperand = [NSMutableString stringWithString:@""];
     secondOperand = [NSMutableString stringWithString:@""];
     isFirstOperand = true;
@@ -40,7 +38,6 @@ NSNumberFormatter *formatter;
 }
     
 - (NSString*)doTrigOperator:(NSMutableString*)key{
-    
     double result = 0.0;
        
     if (isFirstOperand) {

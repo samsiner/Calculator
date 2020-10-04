@@ -10,25 +10,69 @@ import XCTest
 @testable import Calculator
 
 class CalculatorTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    var viewController: ViewController!
+    
+    override func setUp() {
+        super.setUp()
+        viewController = ViewController()
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func testOnePlusOneEqualsTwoThenClear() throws {
+        viewController.clear(UIButton())
+        viewController.one(UIButton())
+        viewController.add(UIButton())
+        viewController.one(UIButton())
+        XCTAssertEqual(viewController.text, "1", "text should say 1")
+        viewController.equals(UIButton())
+        XCTAssertEqual(viewController.text, "2", "text should say 2")
+        viewController.clear(UIButton())
+        XCTAssertEqual(viewController.text, "0", "text should say 0")
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    
+    func testDotAfterDotDoesNothing() throws {
+        viewController.clear(UIButton())
+        viewController.one(UIButton())
+        viewController.dot(UIButton())
+        viewController.two(UIButton())
+        XCTAssertEqual(viewController.text, "1.2", "text should say 1.2")
+        viewController.dot(UIButton())
+        XCTAssertEqual(viewController.text, nil, "text should still say 1.2")
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func testNinetyOneMinusOneEqualsNinetyThenSinEqualsOne() throws {
+        viewController.clear(UIButton())
+        viewController.nine(UIButton())
+        viewController.one(UIButton())
+        viewController.subtract(UIButton())
+        viewController.one(UIButton())
+        viewController.equals(UIButton())
+        XCTAssertEqual(viewController.text, "90", "text should say 90")
+        viewController.sinFunction(UIButton())
+        XCTAssertEqual(viewController.text, "1", "text should still say 1")
     }
-
+    
+    func testIgnoreLeadingZero() throws {
+        viewController.clear(UIButton())
+        viewController.zero(UIButton())
+        viewController.one(UIButton())
+        XCTAssertEqual(viewController.text, "1", "text should say 1")
+    }
+    
+    func testSecondOperatorShowsTotal() throws {
+        viewController.clear(UIButton())
+        viewController.five(UIButton())
+        viewController.dot(UIButton())
+        viewController.two(UIButton())
+        viewController.add(UIButton())
+        viewController.one(UIButton())
+        viewController.dot(UIButton())
+        viewController.four(UIButton())
+        XCTAssertEqual(viewController.text, "1.4", "text should say 1.4")
+        viewController.add(UIButton())
+        XCTAssertEqual(viewController.text, "6.6", "text should say 6.6")
+        viewController.dot(UIButton())
+        viewController.four(UIButton())
+        viewController.equals(UIButton())
+        XCTAssertEqual(viewController.text, "7", "text should say 7")
+    }
 }
