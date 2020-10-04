@@ -24,23 +24,18 @@ NSNumberFormatter *formatter;
     theOperator = [NSMutableString stringWithString:@""];
     total = 0.0;
     
+    // Attempt to keep most characters on the screen without truncating
     formatter = [[NSNumberFormatter alloc]init];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     [formatter setUsesGroupingSeparator:NO];
-    [formatter setUsesSignificantDigits:YES];
-    [formatter setMaximumSignificantDigits: 6];
-    
-    NSLog(@"%@", firstOperand);
-    NSLog(@"%@", secondOperand);
-    NSLog(isFirstOperand ? @"True" : @"False");
-    NSLog(@"%@", theOperator);
-    NSLog(@"%.21g", total);
+    [formatter setMaximumFractionDigits: 3];
 }
-    
+
+// Handle trig operator (sin, cos, tan)
 - (NSString*)doTrigOperator:(NSMutableString*)key{
     double result = 0.0;
        
-    if (isFirstOperand) {
+    if (isFirstOperand && ![firstOperand isEqualToString:@""]) {
         double firstNumber = [firstOperand doubleValue];
         if ([key isEqualToString:@"sin"]){
             result = __sinpi(firstNumber / 180.0);
@@ -52,7 +47,7 @@ NSNumberFormatter *formatter;
 
         firstOperand = [NSMutableString stringWithFormat:@"%.20f", result];
         return [formatter stringFromNumber:[NSNumber numberWithDouble:result]];
-    } else {
+    } else if (!isFirstOperand && ![secondOperand isEqualToString:@""]){
         double secondNumber = [secondOperand doubleValue];
         if ([key isEqualToString:@"sin"]){
             result = __sinpi(secondNumber / 180.0);
@@ -61,12 +56,14 @@ NSNumberFormatter *formatter;
         } else if ([key isEqualToString:@"tan"]){
             result = __tanpi(secondNumber / 180.0);
         }
+        
         secondOperand = [NSMutableString stringWithFormat:@"%.20f", result];
         return [formatter stringFromNumber:[NSNumber numberWithDouble:result]];
     }
     return nil;
 }
 
+// Handle operator (+, -, /, *)
 - (NSString*)doOperator:(NSMutableString*)key{
     if ([firstOperand isEqualToString:@""] && [secondOperand isEqualToString: @""]){
         return nil;
@@ -83,6 +80,7 @@ NSNumberFormatter *formatter;
     return nil;
 }
 
+// Handle digits 0-9 or dot
 - (NSString*)addDigitorDot:(NSMutableString*)key{
     if (!(([key isEqualToString:@"."]) && ((isFirstOperand && [firstOperand containsString:@"."]) || (!isFirstOperand && [secondOperand containsString:@"."]))) && !(([key isEqualToString:@"0"]) && ((isFirstOperand && [firstOperand isEqualToString:@""]) || (!isFirstOperand && [secondOperand isEqualToString:@""])))){
 
@@ -97,6 +95,7 @@ NSNumberFormatter *formatter;
     return nil;
 }
 
+// Handle completion of operation, whether due to multiple operators in a row or due to equals sign
 - (NSString*)completeOperation{
     if (isFirstOperand || [theOperator isEqualToString:@""]){
         return nil;
@@ -126,6 +125,7 @@ NSNumberFormatter *formatter;
     return nil;
 }
 
+// Clears all variables
 - (void)clear{
     [firstOperand setString:@""];
     [secondOperand setString:@""];

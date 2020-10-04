@@ -75,4 +75,11 @@ class CalculatorTests: XCTestCase {
         viewController.equals(UIButton())
         XCTAssertEqual(viewController.text, "7", "text should say 7")
     }
+    
+    func testTrigFunctionBeforeOperandDoesNothing() throws {
+        viewController.clear(UIButton())
+        viewController.sinFunction(UIButton())
+        viewController.seven(UIButton())
+        XCTAssertEqual(viewController.text, "7", "text should say 7")
+    }
 }
