@@ -3,7 +3,7 @@
 //  Calculator
 //
 //  Created by Sam Siner on 10/4/20.
-//  Copyright © 2020 Digital Factory. All rights reserved.
+//  Copyright © 2020 Sam Siner. All rights reserved.
 //
 
 #import "ArithmeticLogic.h"
